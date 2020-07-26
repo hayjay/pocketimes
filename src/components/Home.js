@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
+
 class Home extends Component {
     state = {
         posts : []
@@ -27,7 +29,9 @@ class Home extends Component {
                  return (
                      <div className="post card" key={each_post_data.id}>
                         <div className="card-content">
-                            <span className={each_post_data.title}></span>
+                            <Link to={'/'+each_post_data.id}>
+                                <span className="card-title">{each_post_data.title}</span>
+                            </Link>
                             <p>{each_post_data.body}</p>
                         </div>
                      </div>
