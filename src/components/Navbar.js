@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Link, NavLink, withRouter } from 'react-router-dom';
 const Navbar = (props) => {
-    console.log(props);
+    // console.log(props);
     /* To make this props.history.push work, wrap this component (Navbar) in an HOC component
         Why? Because this component isn't wrapped with the react Router element (<Route></Route>) in app.js
     */
-    setTimeout(() => {
-        props.history.push('/about')
-    }, 2000);
+    // setTimeout(() => {
+    //     props.history.push('/about')
+    // }, 2000);
     return (
         <nav className="nav-wrapper red darken-3">
             <div className="container">
