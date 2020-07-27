@@ -1,32 +1,24 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
 
 class Post extends Component { 
-    state = {
-        id : null, //set to null when this component is first loaded,
-        post : null
-    }
-    componentDidMount(){
-        //Recall that, we automatically get props in class based component such as
-        console.log(this.props);
-        //get the post id from react routers props parameter
-        let id = this.props.match.params.post_id //post_id is an extra route information on the <Route> --see app.js
-        axios.get('https://jsonplaceholder.typicode.com/posts/'+ id)
-        .then((res) => {
-            this.setState({
-                post : res.data,
-                id
-            })
-            console.log(res)
-        });
-        //persist the id from the url to this component id
-       
+    handleClick = () => {
+        this.props.deletePost(this.props.post.id)
+        //after deleting the post, redirect the user to the home/post listings page
+        this.props.history.push('/')
     }
     render() {
-        const post = this.state.post ? (
+        console.log(this.props)
+        const post = this.props.post ? (
             <div className="post">
-                <h4 className="center">{this.state.post.title}</h4>
-                <p>{this.state.post.body} </p>
+                <h4 className="center">{this.props.post.title}</h4>
+                <p>{this.props.post.body} </p>
+                <div className="center">
+                        <button className="btn grey" onClick={this.handleClick}>
+                            Delete Post
+                        </button>
+                </div>
             </div> 
         ) : (
             <div className="center">Loading post...</div>
@@ -39,4 +31,28 @@ class Post extends Component {
     }
 }
 
-export default Post
+//Recall that, we use props to pass data to redux store
+const mapStateToProps = (state, thisParticularProps) => {
+    // grab the id of the post from the route parameters
+    let id = thisParticularProps.match.params.post_id // gotten from the <Route/> appjs
+    return {
+        post : state.posts.find((post) => {
+            //if the post id in redux store matches the id gotten from url parameter
+            return post.id === id //if this is trye then return the matched post by id in the redux store 
+        }) 
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        //dispatch the dispatch action to the reducer whenever we call the deletePost method
+        deletePost : (post_id) => {
+            dispatch({
+                type : 'DELETE_POST',
+                 id : post_id
+            })
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Post)
