@@ -1,27 +1,29 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 import { Link } from 'react-router-dom';
-import Pocketball from '../pokeball.png'
+import Pocketball from '../pokeball.png';
+import { connect } from 'react-redux';
+
 class Home extends Component {
-    state = {
-        posts : []
-    }
-    //make http call in this component
-    componentDidMount() {
-        //make this call asynchronously
-        //returns a promise
-        axios.get('https://jsonplaceholder.typicode.com/posts')
-            .then((response) => {
-                // console.log(response)
-                //save the post data to our component so it can be used in the template (render method)
-                this.setState({
-                    posts : response.data.slice(0,10) //pick ten records from the posts data
-                });
-            })
-    }
+    // state = {
+    //     posts : []
+    // }
+    // //make http call in this component
+    // componentDidMount() {
+    //     //make this call asynchronously
+    //     //returns a promise
+    //     axios.get('https://jsonplaceholder.typicode.com/posts')
+    //         .then((response) => {
+    //             // console.log(response)
+    //             //save the post data to our component so it can be used in the template (render method)
+    //             this.setState({
+    //                 posts : response.data.slice(0,10) //pick ten records from the posts data
+    //             });
+    //         })
+    // }
     render() {
-        // const { posts } = this.state; //use array destructuring to pick the post from the component state
-        const posts = this.state.posts;
+        // const
+        const posts = this.props.posts; //grabs this posts from this component props because this component is now connected to the redux store
         //check if we have a post data
         //return a JSX if we have a data or not then finally pass this jsX to the component template in the render method
         const postList = posts.length ? (
@@ -50,4 +52,15 @@ class Home extends Component {
     }
 }
 
-export default Home
+//if component wants to get data from the store, it goes to the store and gets the data from it and maps it to the props
+ 
+const mapStateToProps = (state) => {
+    //add below data to the props
+    return {
+        //apply the state.posts from redux store to this components posts
+        posts : state.posts //state.posts is gotten from the store property called posts
+    }
+}
+
+//pass mapstatetoprops so redux store can know what data we want to grab from him. in this case it is the post property
+export default connect(mapStateToProps)(Home) //connect is an higher order component so we have to first of all invoke it
