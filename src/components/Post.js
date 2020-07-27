@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import {deletePostAction} from '../actions/postActions';
 
 class Post extends Component { 
     handleClick = () => {
@@ -47,10 +48,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         //dispatch the dispatch action to the reducer whenever we call the deletePost method
         deletePost : (post_id) => {
-            dispatch({
-                type : 'DELETE_POST',
-                 id : post_id
-            })
+            dispatch(deletePostAction(post_id))
         }
     }
 }
